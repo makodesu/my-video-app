@@ -1,0 +1,58 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 开始学习按钮 -->
+  <view wx:if="{{showStartButton}}" class="start-section">
+    <button class="start-btn" bindtap="startLearning">开始学习</button>
+  </view>
+
+  <!-- 视频播放区域 -->
+  <view wx:if="{{showVideo}}" class="video-section">
+    <video 
+      id="myVideo"
+      src="{{videoUrl}}"
+      controls
+      bindended="onVideoEnd"
+      binderror="onVideoError"
+      class="video-player"
+    ></video>
+  </view>
+
+  <!-- 答题区域 -->
+  <view wx:if="{{showQuestion}}" class="question-section" bindtap="handleQuestionAreaClick">
+    <view class="question-header">
+      <text class="question-number">第 {{currentQuestionIndex + 1}} / {{totalQuestions}} 题</text>
+      <text class="score">当前积分：{{score}}</text>
+    </view>
+    
+    <view class="question-content">
+      <text class="question-text">{{currentQuestion.question}}</text>
+    </view>
+
+    <view class="options-container">
+      <view 
+        wx:for="{{currentQuestion.options}}" 
+        wx:key="index"
+        class="option-item {{optionClass[index]}}"
+        catchtap="selectOption"
+        data-index="{{index}}"
+      >
+        <text class="option-label">{{item.label}}</text>
+        <text class="option-text">{{item.text}}</text>
+      </view>
+    </view>
+
+    <!-- 下一题按钮 -->
+    <view wx:if="{{showNextButton}}" class="next-btn-container">
+      <button class="next-btn" bindtap="nextQuestion">下一题</button>
+    </view>
+  </view>
+
+  <!-- 提示弹窗 -->
+  <view wx:if="{{showToast}}" class="toast-modal" bindtap="handleToastClick">
+    <view class="toast-content">
+      <text class="toast-message">{{toastMessage}}</text>
+      <text wx:if="{{showScore}}" class="toast-score">+{{earnedScore}} 积分</text>
+    </view>
+  </view>
+</view>
+

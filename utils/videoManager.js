@@ -2,28 +2,27 @@
 // 管理视频文件，随机选择视频
 
 /**
- * 配置选项
- * useNetworkUrl: 是否使用网络URL（true=网络URL, false=本地路径）
- * baseUrl: 网络URL的基础地址（如果useNetworkUrl为true时使用）
+ * 配置选项 - 使用GitHub Pages
  * 
- * 使用网络URL的步骤：
- * 1. 将视频文件上传到云存储（推荐：腾讯云COS、阿里云OSS、七牛云等）
- * 2. 获取视频文件的访问URL
- * 3. 将 useNetworkUrl 设置为 true
- * 4. 将 baseUrl 设置为你的视频服务器地址（以 / 结尾）
- * 5. 在微信公众平台配置合法域名（正式环境需要）
+ * 配置步骤：
+ * 1. 将视频文件上传到GitHub仓库（确保每个文件小于100MB）
+ * 2. 在GitHub仓库中启用GitHub Pages
+ * 3. 获取GitHub Pages URL（格式：https://your-username.github.io/your-repo-name/）
+ * 4. 将 useNetworkUrl 设置为 true
+ * 5. 将 baseUrl 设置为你的GitHub Pages地址（以 /video/ 结尾）
  * 
  * 示例：
  * const config = {
  *   useNetworkUrl: true,
- *   baseUrl: 'https://your-bucket.cos.ap-guangzhou.myqcloud.com/'
+ *   baseUrl: 'https://makodesu.github.io/my-video-app/video/'
  * }
  */
 const config = {
-  useNetworkUrl: false, // 设置为true使用网络URL，false使用本地路径
-  baseUrl: 'https://your-domain.com/video/' // 网络URL的基础地址，请替换为实际地址
-  // 示例：'https://your-bucket.cos.ap-guangzhou.myqcloud.com/'
-  // 示例：'https://your-server.com/video/'
+  useNetworkUrl: true, // 使用GitHub Pages网络URL
+  // 使用GitHub Pages（最稳定，推荐）
+  baseUrl: 'https://makodesu.github.io/my-video-app/video/'
+  // 如果GitHub Pages速度慢，可以尝试jsDelivr CDN（可能有403限制）：
+  // baseUrl: 'https://cdn.jsdelivr.net/gh/makodesu/my-video-app@main/video/'
 }
 
 /**
@@ -36,7 +35,7 @@ const videoList = [
   'video2',
   'video3'
   // 可以继续添加更多视频文件
-  // 如果文件名有扩展名，请包含扩展名，如：'video1.mp4'
+  // 文件名可以不带扩展名，代码会自动添加.mp4
 ]
 
 /**

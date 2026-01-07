@@ -20,6 +20,14 @@ E:\cursorjava\
 ├── app.json              # 小程序全局配置
 ├── app.wxss              # 小程序全局样式
 ├── sitemap.json          # 小程序索引配置
+├── questions.txt         # 题目数据文件
+├── utils/
+│   ├── questionParser.js # 题目解析工具
+│   └── videoManager.js   # 视频管理工具（GitHub Pages配置）
+├── video/                # 视频文件目录
+│   ├── video1.mp4        # 视频文件1
+│   ├── video2.mp4        # 视频文件2
+│   └── video3.mp4        # 视频文件3
 ├── pages/
 │   └── index/
 │       ├── index.js      # 页面逻辑
@@ -31,19 +39,43 @@ E:\cursorjava\
 
 ## 使用说明
 
-### 1. 配置视频地址
+### 1. 配置视频地址（使用GitHub Pages）
 
-在 `pages/index/index.js` 文件中，找到以下代码并替换为你的视频地址：
+视频文件通过GitHub Pages提供，配置步骤：
 
-```javascript
-videoUrl: 'https://example.com/video.mp4', // 请替换为实际视频地址
-```
+1. **上传视频到GitHub**
+   - 将视频文件（video1.mp4, video2.mp4, video3.mp4）放在 `video/` 文件夹
+   - 确保每个文件小于100MB（GitHub限制）
+   - 上传到GitHub仓库
 
-**注意**：微信小程序对视频域名有要求，需要在微信公众平台配置合法域名。
+2. **启用GitHub Pages**
+   - 在GitHub仓库中，进入 Settings -> Pages
+   - Source选择 `main` 分支，Folder选择 `/root`
+   - 保存后获得URL：`https://your-username.github.io/your-repo-name/`
+
+3. **修改配置**
+   - 打开 `utils/videoManager.js`
+   - 修改 `baseUrl` 为你的GitHub Pages地址：
+   ```javascript
+   const config = {
+     useNetworkUrl: true,
+     baseUrl: 'https://your-username.github.io/your-repo-name/video/'
+   }
+   ```
+
+**注意**：
+- 视频文件必须小于100MB
+- 如果文件过大，需要先压缩（参考 `GitHub不使用LFS配置指南.md`）
+- 在微信开发者工具中测试时，需要勾选"不校验合法域名"
 
 ### 2. 自定义题库
 
-在 `pages/index/index.js` 文件的 `questionBank` 数组中添加或修改题目：
+题目数据存储在 `questions.txt` 文件中，格式：
+```
+题目名称|问题|A|选项A|B|选项B|C|选项C|D|选项D|正确答案索引(0-3)
+```
+
+也可以直接在 `utils/questionParser.js` 中修改题目数据。
 
 ```javascript
 {
@@ -87,9 +119,17 @@ videoUrl: 'https://example.com/video.mp4', // 请替换为实际视频地址
 
 ## 注意事项
 
-1. **视频域名**：需要在微信公众平台配置视频服务器的合法域名
+1. **视频文件**：
+   - 视频文件通过GitHub Pages提供
+   - 每个文件必须小于100MB（GitHub限制）
+   - 如果文件过大，需要先压缩
+   - 参考 `GitHub不使用LFS配置指南.md` 了解详细步骤
+
 2. **题库数量**：确保题库中的题目数量不少于3道，否则可能无法正常抽题
+
 3. **样式适配**：样式已针对小程序进行优化，如需调整可在 `index.wxss` 中修改
+
+4. **开发测试**：在微信开发者工具中，需要勾选"不校验合法域名"才能测试GitHub Pages的视频
 
 ## 扩展建议
 

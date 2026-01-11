@@ -1,0 +1,82 @@
+<!--pages/score/score.wxml-->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-header">
+      <view class="user-info">
+        <text class="user-nickname">{{userInfo.nickname}}</text>
+        <text class="edit-btn" bindtap="editNickname">编辑</text>
+      </view>
+      <view class="user-id">ID: {{userInfo.userId}}</view>
+    </view>
+    
+    <view class="score-stats">
+      <view class="stat-item">
+        <text class="stat-label">总积分</text>
+        <text class="stat-value">{{totalScore}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">今日获得</text>
+        <text class="stat-value today-score">+{{todayScore}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">当前排名</text>
+        <text class="stat-value">{{currentUserRank || '未上榜'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="ranking-section">
+    <view class="section-header">
+      <text class="section-title">积分排行榜</text>
+      <text class="refresh-btn" bindtap="refreshData">刷新</text>
+    </view>
+    
+    <view wx:if="{{loading}}" class="loading">加载中...</view>
+    
+    <view wx:else class="ranking-list">
+      <view 
+        wx:for="{{ranking}}" 
+        wx:key="userId"
+        class="ranking-item {{item.isCurrentUser ? 'current-user' : ''}}"
+      >
+        <view class="rank-number">
+          <text wx:if="{{index < 3}}" class="rank-icon rank-{{index + 1}}">{{index + 1}}</text>
+          <text wx:else class="rank-text">{{index + 1}}</text>
+        </view>
+        <view class="rank-user">
+          <text class="rank-nickname">{{item.nickname}}</text>
+          <text wx:if="{{item.isCurrentUser}}" class="rank-tag">我</text>
+        </view>
+        <view class="rank-score">{{item.totalScore}}分</view>
+      </view>
+      
+      <view wx:if="{{ranking.length === 0}}" class="empty-tip">
+        暂无排行榜数据
+      </view>
+    </view>
+  </view>
+
+  <!-- 积分历史 -->
+  <view class="history-section">
+    <view class="section-header">
+      <text class="section-title">最近7天积分</text>
+    </view>
+    
+    <view class="history-list">
+      <view 
+        wx:for="{{scoreHistory}}" 
+        wx:key="date"
+        class="history-item"
+      >
+        <text class="history-date">{{date}}</text>
+        <text class="history-score">+{{item.score}}分</text>
+      </view>
+      
+      <view wx:if="{{scoreHistory.length === 0}}" class="empty-tip">
+        暂无积分记录
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,6 +1,6 @@
-题目1|以下哪个是JavaScript的数据类型？|A|String|B|Number|C|Boolean|D|以上都是|3
-题目2|微信小程序的页面文件不包括以下哪个？|A|.js|B|.wxml|C|.wxss|D|.html|3
-题目3|以下哪个方法可以获取用户信息？|A|wx.getUserInfo|B|wx.getUserProfile|C|wx.login|D|wx.request|1
-题目4|小程序中如何设置页面标题？|A|在app.json中设置|B|在页面的.json文件中设置|C|使用wx.setNavigationBarTitle|D|以上都可以|3
-题目5|以下哪个不是小程序的全局配置？|A|pages|B|window|C|tabBar|D|component|3
+题目1|以下哪个是JavaScript的数据类型？|A|String|B|Number|C|Boolean|D|以上都是|3|5
+题目2|微信小程序的页面文件不包括以下哪个？|A|.js|B|.wxml|C|.wxss|D|.html|3|5
+题目3|以下哪个方法可以获取用户信息？|A|wx.getUserInfo|B|wx.getUserProfile|C|wx.login|D|wx.request|1|5
+题目4|小程序中如何设置页面标题？|A|在app.json中设置|B|在页面的.json文件中设置|C|使用wx.setNavigationBarTitle|D|以上都可以|3|5
+题目5|以下哪个不是小程序的全局配置？|A|pages|B|window|C|tabBar|D|component|3|5
 

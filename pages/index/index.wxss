@@ -14,6 +14,13 @@
   height: 100vh;
 }
 
+.start-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30rpx;
+}
+
 .start-btn {
   width: 400rpx;
   height: 100rpx;
@@ -27,6 +34,22 @@
 }
 
 .start-btn::after {
+  border: none;
+}
+
+.score-btn {
+  width: 400rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 40rpx;
+  border: none;
+  box-shadow: 0 5rpx 20rpx rgba(102, 126, 234, 0.4);
+}
+
+.score-btn::after {
   border: none;
 }
 
@@ -156,6 +179,75 @@
 .option-item.wrong .option-text {
   color: #c62828;
   font-weight: bold;
+}
+
+/* 下一题预览区域 */
+.next-preview-section {
+  margin-top: 40rpx;
+  padding-top: 30rpx;
+  border-top: 2rpx dashed #ddd;
+}
+
+.preview-divider {
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, #ddd, transparent);
+  margin-bottom: 30rpx;
+}
+
+.preview-header {
+  margin-bottom: 20rpx;
+}
+
+.preview-title {
+  font-size: 28rpx;
+  color: #999;
+  font-weight: bold;
+}
+
+.preview-question {
+  margin-bottom: 30rpx;
+}
+
+.preview-question-text {
+  font-size: 32rpx;
+  color: #666;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.preview-options {
+  margin-bottom: 20rpx;
+}
+
+.preview-option-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  margin-bottom: 15rpx;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+  border: 2rpx solid #eee;
+  opacity: 0.8;
+}
+
+.preview-option-label {
+  width: 50rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  background: #e0e0e0;
+  border-radius: 50%;
+  margin-right: 15rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.preview-option-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #999;
 }
 
 /* 下一题按钮 */

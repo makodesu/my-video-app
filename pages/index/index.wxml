@@ -2,7 +2,10 @@
 <view class="container">
   <!-- 开始学习按钮 -->
   <view wx:if="{{showStartButton}}" class="start-section">
-    <button class="start-btn" bindtap="startLearning">开始学习</button>
+    <view class="start-content">
+      <button class="start-btn" bindtap="startLearning">开始学习</button>
+      <button class="score-btn" bindtap="goToScorePage">积分统计</button>
+    </view>
   </view>
 
   <!-- 视频播放区域 -->

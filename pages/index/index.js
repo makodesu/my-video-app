@@ -2,6 +2,7 @@
 const app = getApp()
 const questionParser = require('../../utils/questionParser.js')
 const videoManager = require('../../utils/videoManager.js')
+const scoreManager = require('../../utils/scoreManager.js')
 
 Page({
   data: {
@@ -41,23 +42,67 @@ Page({
   },
 
   onLoad() {
-    // 从全局数据获取积分
+    // 从积分管理器获取用户总积分
+    const totalScore = scoreManager.getUserTotalScore()
     this.setData({
-      score: app.globalData.score || 0
+      score: totalScore
     })
     
     // 加载题目数据
     this.loadQuestions()
   },
 
+  onShow() {
+    // 每次显示页面时刷新积分
+    const totalScore = scoreManager.getUserTotalScore()
+    this.setData({
+      score: totalScore
+    })
+  },
+
+  // 跳转到积分统计页面
+  goToScorePage() {
+    wx.navigateTo({
+      url: '/pages/score/score'
+    })
+  },
+
   // 加载题目数据
   loadQuestions() {
+    // 配置：是否从GitHub加载题目
+    // true: 从GitHub加载（上线时使用）
+    // false: 从本地加载（测试时使用）
+    const useGitHub = false // 改为true启用GitHub加载
+    const githubUrl = 'https://makodesu.github.io/my-video-app/questions.txt' // GitHub题目文件URL
+    
+    if (useGitHub) {
+      // 从GitHub加载题目
+      questionParser.loadQuestionsFromGitHub(githubUrl)
+        .then(questions => {
+          this.setData({
+            questionBank: questions
+          })
+          console.log('从GitHub加载题目成功，共', questions.length, '道题')
+        })
+        .catch(error => {
+          console.error('从GitHub加载题目失败:', error)
+          // 失败时使用本地题目
+          this.loadLocalQuestions()
+        })
+    } else {
+      // 从本地加载题目
+      this.loadLocalQuestions()
+    }
+  },
+
+  // 从本地加载题目
+  loadLocalQuestions() {
     try {
-      // 从txt文件加载题目（本地方式）
       const questions = questionParser.loadQuestionsFromTxt()
       this.setData({
         questionBank: questions
       })
+      console.log('从本地加载题目成功，共', questions.length, '道题')
     } catch (error) {
       console.error('加载题目失败:', error)
       wx.showToast({
@@ -82,8 +127,57 @@ Page({
     }
   },
 
+  // 检查今日是否已观看视频
+  checkTodayVideoWatched() {
+    // 如果功能未启用，直接返回false（允许观看）
+    if (!app.globalData.enableDailyVideoLimit) {
+      return false
+    }
+    
+    try {
+      const today = new Date().toDateString() // 获取今天的日期字符串，格式：Mon Jan 01 2024
+      const lastWatchDate = wx.getStorageSync('lastVideoWatchDate')
+      
+      // 如果今天已经看过，返回true
+      if (lastWatchDate === today) {
+        return true
+      }
+      
+      return false
+    } catch (error) {
+      console.error('检查观看记录失败:', error)
+      return false // 出错时允许观看
+    }
+  },
+
+  // 记录今日已观看视频
+  recordTodayVideoWatched() {
+    // 如果功能未启用，不记录
+    if (!app.globalData.enableDailyVideoLimit) {
+      return
+    }
+    
+    try {
+      const today = new Date().toDateString()
+      wx.setStorageSync('lastVideoWatchDate', today)
+    } catch (error) {
+      console.error('记录观看日期失败:', error)
+    }
+  },
+
   // 开始学习
   startLearning() {
+    // 检查今日是否已观看视频
+    if (this.checkTodayVideoWatched()) {
+      wx.showModal({
+        title: '提示',
+        content: '今日已经看过视频了，明天再来吧',
+        showCancel: false,
+        confirmText: '知道了'
+      })
+      return
+    }
+    
     // 随机选择一个视频
     let randomVideoUrl = videoManager.getRandomVideo()
     
@@ -104,6 +198,9 @@ Page({
       // 如果这个不行，可以尝试相对路径：../../video/video1.mp4
       randomVideoUrl = randomVideoUrl.startsWith('/') ? randomVideoUrl : '/' + randomVideoUrl
     }
+    
+    // 记录今日已观看
+    this.recordTodayVideoWatched()
     
     this.setData({
       showStartButton: false,
@@ -179,100 +276,49 @@ Page({
 
   // 处理正确答案
   handleCorrectAnswer() {
-    const earnedScore = 5
-    const newScore = this.data.score + earnedScore
+    // 获取当前题目的分值（如果没有设置，默认为5分）
+    const earnedScore = this.data.currentQuestion.score || 5
     
-    // 更新全局积分
-    app.globalData.score = newScore
+    // 使用积分管理器记录积分
+    const newTotalScore = scoreManager.addUserScore(earnedScore)
     
+    // 立即显示结果和下一题按钮
     this.setData({
-      score: newScore,
+      score: newTotalScore,
       earnedScore: earnedScore,
       toastMessage: '回答正确',
       showScore: true,
-      showToast: true
-    })
-
-    // 5秒后自动显示下一题按钮
-    const timer = setTimeout(() => {
-      this.setData({
-        showNextButton: true
-      })
-    }, 5000)
-
-    this.setData({
-      nextQuestionTimer: timer
+      showToast: true,
+      showNextButton: true // 立即显示下一题按钮
     })
   },
 
   // 处理错误答案
   handleWrongAnswer() {
+    // 立即显示结果和下一题按钮
     this.setData({
-      toastMessage: '回答正确', // 按照用户需求，答错也显示"回答正确"
+      toastMessage: '回答错误',
       showScore: false,
-      showToast: false // 先不显示，等5秒或点击后显示
-    })
-
-    // 5秒后显示提示
-    const toastTimer = setTimeout(() => {
-      this.setData({
-        showToast: true
-      })
-      
-      // 再5秒后显示下一题按钮
-      const nextTimer = setTimeout(() => {
-        this.setData({
-          showNextButton: true
-        })
-      }, 5000)
-      
-      this.setData({
-        nextQuestionTimer: nextTimer
-      })
-    }, 5000)
-
-    this.setData({
-      toastTimer: toastTimer
+      showToast: true, // 立即显示提示
+      showNextButton: true // 立即显示下一题按钮
     })
   },
 
-  // 点击答题区域（用于答错后点击屏幕显示提示）
+  // 点击答题区域（已不需要，保留以防其他地方调用）
   handleQuestionAreaClick(e) {
     // 如果点击的是选项，不处理（选项有自己的点击事件）
     if (e.target.dataset.index !== undefined) {
       return
     }
-    
-    // 如果已经答错且还没显示提示，点击后显示提示
-    if (!this.data.showToast && this.data.hasAnswered && this.data.selectedAnswer !== this.data.currentQuestion.correctAnswer) {
-      this.setData({
-        showToast: true
-      })
-      
-      // 清除之前的定时器
-      if (this.data.toastTimer) {
-        clearTimeout(this.data.toastTimer)
-      }
-      
-      // 5秒后显示下一题按钮
-      const timer = setTimeout(() => {
-        this.setData({
-          showNextButton: true
-        })
-      }, 5000)
-      
-      this.setData({
-        nextQuestionTimer: timer
-      })
-    }
   },
 
-  // 点击提示弹窗
+  // 点击提示弹窗（关闭弹窗，但不进入下一题）
   handleToastClick() {
-    if (this.data.showNextButton) {
-      // 如果已经显示下一题按钮，点击后直接进入下一题
-      this.nextQuestion()
-    }
+    // 点击弹窗背景关闭提示，但不进入下一题
+    // 只有点击"下一题"按钮才会进入下一题
+    this.setData({
+      showToast: false
+    })
   },
 
   // 下一题
@@ -295,11 +341,13 @@ Page({
       })
     } else {
       // 所有题目答完
+      const totalScore = scoreManager.getUserTotalScore()
       wx.showModal({
         title: '恭喜完成',
-        content: `您已完成所有题目！总积分：${this.data.score}`,
+        content: `您已完成所有题目！总积分：${totalScore}`,
         showCancel: false,
-        success: () => {
+        confirmText: '查看积分统计',
+        success: (res) => {
           // 重置到开始状态
           this.setData({
             showStartButton: true,
@@ -310,8 +358,16 @@ Page({
             optionClass: ['', '', '', ''],
             showToast: false,
             showNextButton: false,
-            showScore: false
+            showScore: false,
+            score: totalScore
           })
+          
+          // 如果点击了确认，跳转到积分统计页面
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '/pages/score/score'
+            })
+          }
         }
       })
     }

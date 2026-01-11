@@ -1,0 +1,240 @@
+/* pages/score/score.wxss */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background: #fff;
+  border-radius: 30rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
+}
+
+.user-header {
+  margin-bottom: 30rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid #eee;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.user-nickname {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.edit-btn {
+  font-size: 28rpx;
+  color: #667eea;
+  padding: 10rpx 20rpx;
+  border: 2rpx solid #667eea;
+  border-radius: 20rpx;
+}
+
+.user-id {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.score-stats {
+  display: flex;
+  justify-content: space-around;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.stat-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.stat-value.today-score {
+  color: #4caf50;
+}
+
+/* 排行榜区域 */
+.ranking-section {
+  background: #fff;
+  border-radius: 30rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #eee;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.refresh-btn {
+  font-size: 28rpx;
+  color: #667eea;
+  padding: 10rpx 20rpx;
+  border: 2rpx solid #667eea;
+  border-radius: 20rpx;
+}
+
+.loading {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.ranking-list {
+  min-height: 200rpx;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 25rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.ranking-item:last-child {
+  border-bottom: none;
+}
+
+.ranking-item.current-user {
+  background: #f0f4ff;
+  margin: 0 -40rpx;
+  padding: 25rpx 40rpx;
+  border-radius: 15rpx;
+}
+
+.rank-number {
+  width: 80rpx;
+  text-align: center;
+}
+
+.rank-icon {
+  display: inline-block;
+  width: 50rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.rank-icon.rank-1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+}
+
+.rank-icon.rank-2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+}
+
+.rank-icon.rank-3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #e6a857 100%);
+}
+
+.rank-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #666;
+}
+
+.rank-user {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-left: 20rpx;
+}
+
+.rank-nickname {
+  font-size: 32rpx;
+  color: #333;
+  margin-right: 15rpx;
+}
+
+.rank-tag {
+  font-size: 20rpx;
+  color: #fff;
+  background: #667eea;
+  padding: 4rpx 12rpx;
+  border-radius: 10rpx;
+}
+
+.rank-score {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 积分历史区域 */
+.history-section {
+  background: #fff;
+  border-radius: 30rpx;
+  padding: 40rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.2);
+}
+
+.history-list {
+  min-height: 100rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-date {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.history-score {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #4caf50;
+}

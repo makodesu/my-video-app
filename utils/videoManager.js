@@ -31,9 +31,7 @@ const config = {
  * 支持带扩展名和不带扩展名的文件名
  */
 const videoList = [
-  'video1',
-  'video2',
-  'video3'
+  'video1'
   // 可以继续添加更多视频文件
   // 文件名可以不带扩展名，代码会自动添加.mp4
 ]
@@ -58,7 +56,9 @@ function getRandomVideo() {
   // 根据配置返回网络URL或本地路径
   if (config.useNetworkUrl) {
     // 使用网络URL（需要在app.json中配置合法域名）
-    return config.baseUrl + videoFileName
+    // 添加时间戳参数避免缓存（每天更新一次）
+    const timestamp = Math.floor(Date.now() / (1000 * 60 * 60 * 24)) // 每天更新
+    return config.baseUrl + videoFileName + '?v=' + timestamp
   } else {
     // 使用本地路径
     // 注意：小程序通常无法直接播放项目目录中的视频文件
